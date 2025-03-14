@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 将构建好的JAR文件复制到镜像中
-COPY target/app.jar /app/app.jar
+COPY target/SpringBoot-GitHubAction-1.0-SNAPSHOT.jar /app/SpringBoot-GitHubAction-1.0-SNAPSHOT.jar
 
 # 暴露应用的端口
 EXPOSE 8094
 
 # 定义启动命令
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "SpringBoot-GitHubAction-1.0-SNAPSHOT.jar"]
