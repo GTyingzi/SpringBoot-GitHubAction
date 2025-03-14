@@ -28,7 +28,9 @@ jobs:
 
     - name: Build with Maven
       # 使用Maven构建项目
-      run: mvn -B package --file pom.xml
+      run: |
+        mvn clean
+        mvn -B package --file pom.xml
 
     - name: Build Docker image
       # 构建Docker镜像
