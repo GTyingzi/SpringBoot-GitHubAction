@@ -33,19 +33,25 @@ jobs:
     - name: Build Docker image
       # 构建Docker镜像
       run: |
-        docker build -t your-dockerhub-username/your-repo-name:${{ github.sha }} .
+        docker build -t springboot_action:${{ github.sha }} .
 
-    - name: Login to Docker Hub
-      # 登录Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to Alibaba Cloud Container Registry
+      # 登录到阿里云镜像服务
+      run: |
+        docker login --username=${{ secrets.DOCKER_USERNAME }} registry.cn-beijing.aliyuncs.com
+      env:
+        ALIBABA_CLOUD_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        ALIBABA_CLOUD_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Tag Docker image
+      # 为Docker镜像打标签
+      run: |
+        docker tag springboot_action:${{ github.sha }} registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
 
     - name: Push Docker image
-      # 推送Docker镜像到Docker Hub
+      # 推送Docker镜像到阿里云镜像服务
       run: |
-        docker push your-dockerhub-username/your-repo-name:${{ github.sha }}
+        docker push registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
 
     - name: Deploy to Cloud Server
       # 使用ssh-action插件部署到云服务器
@@ -53,9 +59,9 @@ jobs:
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
+        password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          docker pull your-dockerhub-username/your-repo-name:${{ github.sha }}
-          docker stop your-container-name || true
-          docker rm your-container-name || true
-          docker run -d --name your-container-name -p 8080:8080 your-dockerhub-username/your-repo-name:${{ github.sha }}
+          docker pull registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
+          docker stop springboot_action || true
+          docker rm springboot_action || true
+          docker run -d --name springboot_action -p 8094:8094 registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
