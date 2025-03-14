@@ -1,6 +1,9 @@
 描述：利用GitHub Action搭建工作流
 
-关注点
+详细部署步骤：https://ik3te1knhq.feishu.cn/wiki/XsI2w3qQBi0k7cksjoYcZ8O2nLc
+
+
+核心关注文件
 ```angular2html
 .github
     workflows
