@@ -40,17 +40,17 @@ jobs:
     - name: Login to Alibaba Cloud Container Registry
       # 登录到阿里云镜像服务
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin registry.cn-beijing.aliyuncs.com
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin registry.cn-hangzhou.aliyuncs.com
 
     - name: Tag Docker image
       # 为Docker镜像打标签
       run: |
-        docker tag springboot_action:${{ github.sha }} registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
+        docker tag springboot_action:${{ github.sha }} registry.cn-hangzhou.aliyuncs.com/yingzi_666/action_test:${{ github.sha }}
 
     - name: Push Docker image
       # 推送Docker镜像到阿里云镜像服务
       run: |
-        docker push registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
+        docker push registry.cn-hangzhou.aliyuncs.com/yingzi_666/action_test:${{ github.sha }}
 
     - name: Deploy to Cloud Server
       # 使用ssh-action插件部署到云服务器
@@ -61,7 +61,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin registry.cn-beijing.aliyuncs.com
-          docker pull registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
+          docker pull pull registry.cn-hangzhou.aliyuncs.com/yingzi_666/action_test:${{ github.sha }}
           docker stop springboot_action || true
           docker rm springboot_action || true
-          docker run -d --name springboot_action -p 8094:8094 registry.cn-beijing.aliyuncs.com/yingzi_gt/springboot_action:${{ github.sha }}
+          docker run -d --name springboot_action -p 8094:8094 registry.cn-hangzhou.aliyuncs.com/yingzi_666/action_test:${{ github.sha }}
