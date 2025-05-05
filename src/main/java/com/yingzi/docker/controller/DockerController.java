@@ -14,6 +14,6 @@ public class DockerController {
 
     @GetMapping("/hi")
     public String hi() {
-        return "Hello World!";
+        return "Hello yingzi!";
     }
 }
